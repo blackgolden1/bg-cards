@@ -55,21 +55,21 @@ const landingData: Record<string, Employee> = {
     youtubeUrl: "https://www.youtube.com/channel/UCh3N_GIgYNX5Qix4EQ6ZjKg",
   },
 
-  "leidy-florez-rodriguez": {
-    firstName: "Leidy",
-    lastName: "Flórez Rodríguez",
+  "hector-javier-parra-tique": {
+    firstName: "Héctor Javier",
+    lastName: "Parra Tique",
     rol: "Asistente Comercial Sede IBG",
-    phoneCard: "3175705681",
-    email: "asistentecomercialibague@edelco.co",
+    phoneCard: "3173686400",
+    email: "asesor7@edelco.co",
     website: "https://edelco.co",
 
-    fullName: "Leidy Flórez Rodríguez",
-    profilePhotoUrl: "/edelco/profiles/Leidy Florez Rodriguez.jpg",
-    whspUrl: "https://wa.me/573175705681",
+    fullName: "Héctor Javier Parra Tique",
+    profilePhotoUrl: "/edelco/profiles/Javier Parra.jpg",
+    whspUrl: "https://wa.me/573173686400",
     facebookUrl: "https://www.facebook.com/EDELCO.SAS/",
     emailUrl: "mailto:asistentecomercialibague@edelco.co",
     instagramUrl: "https://www.instagram.com/edelcosas",
-    phone: "tel:+573175705681",
+    phone: "tel:+573173686400",
     youtubeUrl: "https://www.youtube.com/channel/UCh3N_GIgYNX5Qix4EQ6ZjKg",
   },
 
