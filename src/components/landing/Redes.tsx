@@ -1,18 +1,33 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Image from "next/image";
+
 interface Network {
-    name: string;
-    url: string;
-    icon: string;
+  name: string;
+  url: string;
+  icon: string;
 }
 
 export default function Redes({ name, url, icon }: Network) {
-    return (
-<section className="w-full mx-auto flex flex-col items-center">
-    <a href={url} className="w-fit mx-auto text-center" target="_blank">
-        <div className="rounded-full p-1 w-fit ">
-            <img src={icon} alt="" className="md:w-[7rem] w-[3rem]"/>
-        </div>
-        <h3 className="text-center md:text-2xl 2xl:text-3xl text-black">{name}</h3>
-    </a>
-</section>
-    )
+  return (
+    <motion.a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ scale: 1.08, y: -4 }}
+      whileTap={{ scale: 0.95 }}
+      className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-card text-card-foreground border border-border hover:border-primary transition-colors"
+    >
+      <Image
+        src={icon}
+        alt={name}
+        width={64}
+        height={64}
+        className="w-12 h-12 md:w-16 md:h-16 object-contain"
+        unoptimized
+      />
+      <span className="text-sm font-medium text-center">{name}</span>
+    </motion.a>
+  );
 }

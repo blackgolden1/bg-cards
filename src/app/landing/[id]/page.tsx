@@ -1,68 +1,69 @@
-
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import landingData, { sharedCompanyData } from "@/lib/dummyData";
 import { Employee } from "@/types/Employee";
-import {Company, Portfolio, } from "@/components/landing";
-import QRCodeRedirect from "@/components/landing/QRCodeRedirect";
-import FlipCard from '@/components/landing/FlipCard';
-import '../../../styles/globals.css'; // Import global styles
-// ...existing code...
-type Props = {
+import { FlipCard, Portfolio, Company, QRCodeRedirect } from "@/components/landing";
+import ThemeToggle from "@/components/ui/ThemeToggle";
+
+interface Props {
   params: Promise<{ id: string }>;
-};
+}
 
 export function generateStaticParams() {
   return Object.keys(landingData).map((id) => ({ id }));
 }
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const employee = landingData[id];
+  if (!employee) {
+    return {
+      title: "Tarjeta no encontrada - Edelco",
+    };
+  }
+
+  return {
+    title: `${employee.fullName} - Tarjeta virtual Edelco`,
+    description: `${employee.rol} en Edelco SAS. Contactá a ${employee.fullName}.`,
+    openGraph: {
+      title: `${employee.fullName} - Tarjeta virtual Edelco`,
+      description: `${employee.rol} en Edelco SAS`,
+      images: employee.profilePhotoUrl ? [employee.profilePhotoUrl] : undefined,
+    },
+  };
+}
+
 export default async function LandingPage({ params }: Props) {
   const { id } = await params;
-
   const employeeData: Employee | undefined = landingData[id];
+
   if (!employeeData) {
-    return (
-      <div className="text-center p-10">
-        <h1 className="text-4xl font-bold text-red-600">
-          Página no encontrada
-        </h1>
-        <p className="mt-4">Lo sentimos, la tarjeta solicitada no existe.</p>
-      </div>
-    );
+    notFound();
   }
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden py-2 space-y-8 bg-white">
-      <div className="w-screen">
+    <div className="min-h-screen w-full bg-gradient-radial from-background to-background">
+      <ThemeToggle />
+
+      <main className="w-full max-w-6xl mx-auto space-y-12 py-8">
         <FlipCard employeeData={employeeData} />
-      </div>
-      {/* <div className="w-screen">
-        <Header
-          name={employeeData.fullName}
-          profilePhotoUrl={employeeData.profilePhotoUrl}
-          company_description1={sharedCompanyData.company_description1}
-        />
-      </div> */}
-      <div className="w-screen">
+
         <Portfolio
-    
-          company_description1={sharedCompanyData.company_description1}
           whspUrl={employeeData.whspUrl}
           facebookUrl={employeeData.facebookUrl}
           emailUrl={employeeData.emailUrl}
           instagramUrl={employeeData.instagramUrl}
           phone={employeeData.phone}
           youtubeUrl={employeeData.youtubeUrl}
-          companyLogo={sharedCompanyData.companyLogo}
         />
-      </div>
-      <div className="w-screen">
+
         <Company
           company_description2={sharedCompanyData.company_description2}
           address={sharedCompanyData.address}
         />
-      </div>
-      <div className="w-screen">
-      <QRCodeRedirect employeeData={employeeData} id={id}/>
-      </div>
-    </main>
+
+        <QRCodeRedirect id={id} />
+      </main>
+    </div>
   );
 }

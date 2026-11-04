@@ -1,20 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Noto+Sans+Gunjala+Gondi:wght@400..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
-@tailwind base;
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --primary: #1e3a8a;
+  --primary-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --radius: 1rem;
+  --ring: #fbbf24;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --radius: 1rem;
+  --ring: #fbbf24;
 }
+
 @layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-family: 'Josefin Sans', sans-serif;
+    overflow-x: hidden;
+  }
   .heading {
     @apply 2xl:text-[3.2rem] text-[1.8rem] md:text-[2.4rem];
   }
@@ -22,10 +48,19 @@
     @apply 2xl:text-[2.4rem] md:text-[1.8rem] text-[1.4rem];
   }
 }
-body {
-  width: 100vw;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'Josefin Sans', sans-serif;
-  overflow-x: hidden;
+
+@layer utilities {
+  .bg-gradient-radial {
+    background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15), transparent 60%);
+  }
+  .bg-gradient-animated {
+    background: linear-gradient(-45deg, #1e3a8a, #3b82f6, #f59e0b, #1e3a8a);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 }

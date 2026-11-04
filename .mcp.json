@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "bash",
+      "args": [
+        "C:/bg-cards/scripts/start-mcp-github.sh"
+      ],
+      "env": {}
+    }
+  }
+}

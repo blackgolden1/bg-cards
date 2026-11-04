@@ -1,66 +1,128 @@
-// components/landing/CardContainer.tsx
-import Card from './QRCode';
+"use client";
+
+import { motion } from "framer-motion";
+import VCardQR from "./QRCode";
+import { Employee } from "@/types/Employee";
+import { downloadVCard } from "@/lib/vcard";
+import { shareCard } from "@/lib/share";
+import { useState } from "react";
+import GlassCard from "@/components/ui/GlassCard";
+import { DownloadIcon, ShareIcon, LinkIcon, QrCodeIcon } from "@/components/icons/social";
 
 interface CardContainerProps {
-    profilePhotoUrl: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    email: string;
-    rol?: string;
-    website?: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  rol?: string;
+  website?: string;
 }
 
 export default function CardContainer({
-                                          profilePhotoUrl,
-                                          firstName,
-                                          lastName,
-                                          phone,
-                                          email,
-                                          rol,
-                                          website,
-                                      }: CardContainerProps) {
-    return (
-        <section className="text-center my-2 pb-4 px-4 ">
-            <h2 className="heading bg-primary text-white rounded-2xl py-3 px-6 w-fit mb-20 mx-auto">
-                Descargar tarjeta virtual
-            </h2>
-            <div className="relative w-full max-w-xl mx-auto border-8 border-primary rounded-[4rem] bg-white overflow-visible pb-8">
+  firstName,
+  lastName,
+  phone,
+  email,
+  rol,
+  website,
+}: CardContainerProps) {
+  const [copied, setCopied] = useState(false);
 
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-30">
-                    <img
-                        className="md:h-72 h-56 2xl:h-80 rounded-full object-cover shadow-lg"
-                        src={profilePhotoUrl}
-                        alt="Foto de perfil"
-                    />
-                </div>
+  const employee: Employee = {
+    firstName,
+    lastName,
+    fullName: `${firstName} ${lastName}`,
+    phoneCard: phone,
+    email,
+    rol: rol || "",
+    website: website || "",
+    profilePhotoUrl: "",
+    whspUrl: "",
+    facebookUrl: "",
+    emailUrl: `mailto:${email}`,
+    instagramUrl: "",
+    phone: `tel:${phone}`,
+    youtubeUrl: "",
+  };
 
-                {/* Contenido principal */}
-                <div className="md:pt-52 pt-32 md:px-6 px-4 text-center space-y-8 ">
+  const currentId = typeof window !== "undefined" ? window.location.pathname.split("/").pop() || "" : "";
 
-                    <div className="pt-12 text-center bg-primary text-white rounded-3xl shadow-lg z-20 relative md:px-12 px-8 w-fit pb-2 mx-auto">
-                        <p className="heading font-semibold mb-2 font-roboto">Tarjeta virtual</p>
-                        <p className="heading">{firstName}</p>
-                        <p className="heading">{lastName}</p>
-                    </div>
+  const handleShare = async () => {
+    await shareCard(employee, currentId);
+  };
 
-                    <div className="w-fit flex items-center mx-auto">
-                        <Card
-                            firstName={firstName}
-                            lastName={lastName}
-                            phone={phone}
-                            email={email}
-                            rol={rol}
-                            website={website}
-                        />
-                    </div>
-                    <h2 className="md:text-2xl text-xl bg-primary text-white rounded-2xl py-3 px-6 w-fit mb-16 mx-auto">
-                        Escanea codigo QR
-                    </h2>
-                </div>
-            </div>
+  const handleCopy = async () => {
+    const { copied } = await shareCard(employee, currentId);
+    if (copied) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
+  return (
+    <GlassCard className="mx-4 md:mx-auto max-w-xl p-6 md:p-8">
+      <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="shrink-0"
+        >
+          <VCardQR
+            firstName={firstName}
+            lastName={lastName}
+            rol={rol}
+            phone={phone}
+            email={email}
+            website={website}
+          />
+        </motion.div>
 
-        </section>
-    );
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+          className="flex-1 text-center md:text-left space-y-3"
+        >
+          <h2 className="text-2xl font-bold text-foreground">
+            Escaneá para guardar
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            Apuntá la cámara al código QR para agregar este contacto directamente a tu agenda.
+          </p>
+          <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-2">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => downloadVCard(employee)}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-primary/30 transition-all"
+            >
+              <DownloadIcon size={18} />
+              Guardar contacto
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleShare}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-card text-card-foreground border border-border hover:border-primary transition-all"
+            >
+              <ShareIcon size={18} />
+              Compartir
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleCopy}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-card text-card-foreground border border-border hover:border-primary transition-all"
+            >
+              {copied ? <QrCodeIcon size={18} /> : <LinkIcon size={18} />}
+              {copied ? "Copiado" : "Copiar enlace"}
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+    </GlassCard>
+  );
 }

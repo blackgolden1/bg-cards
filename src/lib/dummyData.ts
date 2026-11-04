@@ -154,7 +154,7 @@ const landingData: Record<string, Employee> = {
     website: "https://edelco.co",
 
     fullName: "Juan Carlos Patiño",
-    profilePhotoUrl: "/edelco/profiles/Juan Carlos Patiño.png",
+    profilePhotoUrl: "/edelco/profiles/Juan Carlos Patino.png",
     whspUrl: "https://wa.me/573163909501",
     facebookUrl: "https://www.facebook.com/EDELCO.SAS/",
     emailUrl: "mailto:ccomercialbogota@edelco.co",

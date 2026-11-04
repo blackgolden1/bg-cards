@@ -1,26 +1,41 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config: Config = {
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  
   theme: {
     extend: {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: '#1b5d91' ,
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        border: "var(--border)",
+        ring: "var(--ring)",
       },
-      fontFamily:{
-        josefin: ['"Josefin Sans"', 'sans-serif'],
-        roboto: ['"Roboto Condensed"', 'sans-serif'],
-        noto: ['"Noto Sans Gujarati"', 'sans-serif'],
-      }
+      borderRadius: {
+        lg: "var(--radius)",
+      },
+      fontFamily: {
+        sans: ["Josefin Sans", "sans-serif"],
+      },
     },
   },
   plugins: [],
- 
-} satisfies Config;
+};
+
+export default config;
